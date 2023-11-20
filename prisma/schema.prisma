@@ -1,0 +1,108 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  student_id           Int          @id
+  email                String?       @unique
+  name                 String
+  password             String?
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  level                Int
+  total_credits_earned Int
+  department           Department   @relation(fields: [department_id], references: [department_id])
+  department_id        Int          @unique
+  enrollment           Enrollment[]
+}
+
+model Registration {
+  registration_id       Int      @id @default(autoincrement())
+  status                Status   @default(NO)
+  registration_date     DateTime @default(now())
+  registration_end_date DateTime
+  semester              String
+  registration_details RegistrationDetails[]
+}
+model RegistrationDetails{
+  registration  Registration @relation(fields: [registration_id],references: [registration_id])
+  registration_id       Int
+  course Course @relation(fields: [course_id],references: [course_id])
+  course_id            Int 
+  @@id([registration_id,course_id])
+}
+model Course {
+  course_id            Int                   @id @default(autoincrement())
+  course_code          String                @unique
+  name                 String
+  credits              Int
+  type                 Type
+  instructor Instructor @relation(fields: [instructor_id],references: [instructor_id])
+  instructor_id Int
+  enrollment           Enrollment[]
+  courses              CoursePrerequesites[] @relation("main_course")
+  prerequisites_courses CoursePrerequesites[] @relation("prerequeste_course")
+  regsitration_courses RegistrationDetails[]
+}
+
+model CoursePrerequesites {
+  course                  Course @relation("main_course", fields: [course_id], references: [course_id])
+  course_id               Int
+  course_prerequesites    Course @relation("prerequeste_course", fields: [course_prerequesites_id], references: [course_id])
+  course_prerequesites_id Int
+
+  @@id([course_id, course_prerequesites_id])
+}
+
+model Instructor {
+  instructor_id Int    @id @default(autoincrement())
+  name          String
+  email         String @unique
+  password      String
+  phone         String
+  courses Course[]
+  departments InstructorDepartment[]
+}
+
+model InstructorDepartment{
+  department Department @relation(fields: [department_id],references: [department_id])
+  department_id Int
+  instructor Instructor @relation(fields: [instructor_id],references: [instructor_id])
+  instructor_id Int
+  @@id([department_id,instructor_id])
+}
+
+model Department {
+  department_id Int      @id @default(autoincrement())
+  name          String
+  students      Student?
+  instructors InstructorDepartment[]
+}
+
+model Enrollment {
+  enrollment_id Int     @id @default(autoincrement())
+  student       Student @relation(fields: [student_id], references: [student_id])
+  course        Course  @relation(fields: [course_id], references: [course_id])
+  course_id     Int
+  student_id    Int
+  semester      String
+}
+
+// course type is elective or required 
+enum Type {
+  REQUIRED
+  ELECTIVE
+}
+
+enum Status {
+  YES
+  NO
+}
