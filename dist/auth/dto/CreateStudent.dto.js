@@ -9,37 +9,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateStudentDTO = void 0;
+exports.SignUpStudentDTO = void 0;
 const class_validator_1 = require("class-validator");
-class CreateStudentDTO {
+class SignUpStudentDTO {
 }
-exports.CreateStudentDTO = CreateStudentDTO;
+exports.SignUpStudentDTO = SignUpStudentDTO;
 __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], CreateStudentDTO.prototype, "student_id", void 0);
+], SignUpStudentDTO.prototype, "student_id", void 0);
 __decorate([
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
-], CreateStudentDTO.prototype, "email", void 0);
+], SignUpStudentDTO.prototype, "email", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], CreateStudentDTO.prototype, "password", void 0);
-__decorate([
-    (0, class_validator_1.IsString)(),
-    __metadata("design:type", String)
-], CreateStudentDTO.prototype, "name", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateStudentDTO.prototype, "level", void 0);
-__decorate([
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], CreateStudentDTO.prototype, "total_credits_earned", void 0);
-__decorate([
-    (0, class_validator_1.IsEnum)([1, 2]),
-    __metadata("design:type", Number)
-], CreateStudentDTO.prototype, "department_id", void 0);
+], SignUpStudentDTO.prototype, "password", void 0);
 //# sourceMappingURL=CreateStudent.dto.js.map

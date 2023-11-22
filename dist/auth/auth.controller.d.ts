@@ -1,10 +1,10 @@
 import { AuthService } from './auth.service';
-import { CreateStudentDTO } from './dto/CreateStudent.dto';
+import { SignUpStudentDTO } from './dto/CreateStudent.dto';
 import { SignInStudent } from './dto/SignIn.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    signup(newStudent: CreateStudentDTO): Promise<{
+    StudentSignup(newStudent: SignUpStudentDTO): Promise<{
         student_id: number;
         email: string;
         name: string;
@@ -15,7 +15,7 @@ export declare class AuthController {
         total_credits_earned: number;
         department_id: number;
     }>;
-    signin(body: SignInStudent): Promise<{
+    StudentSignin(body: SignInStudent): Promise<{
         access_token: string;
         refresh_token: string;
         student_id: number;

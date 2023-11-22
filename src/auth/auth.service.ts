@@ -12,27 +12,33 @@ export class AuthService {
 
   async signUp(student: SignUpStudent) {
     // Check if student ID exists
-    if (await this.checkStudentId(student.student_id)) {
-      throw new HttpException('Student ID already exists', HttpStatus.CONFLICT);
+    const checkStudent = await this.prismaService.student.findUnique({
+      where: { student_id: student.student_id },
+    });
+    if (!checkStudent) {
+      throw new HttpException('Student ID not found', HttpStatus.NOT_FOUND);
     }
-    // Check if email exists
+    // Check if the student is already signed up
+    if (checkStudent.email) {
+      throw new HttpException(
+        'This student is already signed up',
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    // Check if email is available
     if (await this.checkEmail(student.email)) {
       throw new HttpException('Email already exists', HttpStatus.CONFLICT);
     }
 
     try {
-      // Create the student
+      // set password and email to student
       const hashPassword = await bcrypt.hash(student.password, 10);
-
-      const newStudent = await this.prismaService.student.create({
+      const newStudent = await this.prismaService.student.update({
+        where: { student_id: student.student_id },
         data: {
-          student_id: student.student_id,
-          name: student.name,
           email: student.email,
-          level: student.level,
-          total_credits_earned: student.total_credits_earned,
           password: hashPassword,
-          department_id: student.department_id,
         },
       });
       return newStudent;

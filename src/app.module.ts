@@ -7,10 +7,11 @@ import { AuthModule } from './auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
-    ConfigModule,
+    ConfigModule.forRoot({
+      envFilePath: '.env.dev',
+    }),
     StudentModule,
     AuthModule,
-  
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,6 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateStudentDTO } from './dto/CreateStudent.dto';
+import { SignUpStudentDTO } from './dto/CreateStudent.dto';
 import { Serialize } from 'src/student/Interceptor/serialize.interceptor';
 import { StudentDTO } from './dto/Student.dto';
 import { SignInStudent } from './dto/SignIn.dto';
@@ -14,12 +14,12 @@ import { RoleGuard } from './guard/role.guard';
 @Serialize(StudentDTO)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @Post('signup')
-  async signup(@Body() newStudent: CreateStudentDTO) {
+  @Put('/student/signup')
+  async StudentSignup(@Body() newStudent: SignUpStudentDTO) {
     return await this.authService.signUp(newStudent);
   }
-  @Post('signin')
-  async signin(@Body() body: SignInStudent) {
+  @Post('/student/signin')
+  async StudentSignin(@Body() body: SignInStudent) {
     return await this.authService.signIn(body.email, body.password);
   }
 

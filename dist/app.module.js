@@ -18,7 +18,9 @@ let AppModule = exports.AppModule = class AppModule {
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            config_1.ConfigModule,
+            config_1.ConfigModule.forRoot({
+                envFilePath: '.env.dev',
+            }),
             student_module_1.StudentModule,
             auth_module_1.AuthModule,
         ],

@@ -12,7 +12,7 @@ datasource db {
 
 model Student {
   student_id           Int          @id
-  email                String?       @unique
+  email                String?      @unique
   name                 String
   password             String?
   createdAt            DateTime     @default(now())
@@ -25,32 +25,35 @@ model Student {
 }
 
 model Registration {
-  registration_id       Int      @id @default(autoincrement())
-  status                Status   @default(NO)
-  registration_date     DateTime @default(now())
+  registration_id       Int                   @id @default(autoincrement())
+  status                Status                @default(NO)
+  registration_date     DateTime              @default(now())
   registration_end_date DateTime
   semester              String
-  registration_details RegistrationDetails[]
+  registration_details  RegistrationDetails[]
 }
-model RegistrationDetails{
-  registration  Registration @relation(fields: [registration_id],references: [registration_id])
-  registration_id       Int
-  course Course @relation(fields: [course_id],references: [course_id])
-  course_id            Int 
-  @@id([registration_id,course_id])
+
+model RegistrationDetails {
+  registration    Registration @relation(fields: [registration_id], references: [registration_id])
+  registration_id Int
+  course          Course       @relation(fields: [course_id], references: [course_id])
+  course_id       Int
+
+  @@id([registration_id, course_id])
 }
+
 model Course {
-  course_id            Int                   @id @default(autoincrement())
-  course_code          String                @unique
-  name                 String
-  credits              Int
-  type                 Type
-  instructor Instructor @relation(fields: [instructor_id],references: [instructor_id])
-  instructor_id Int
-  enrollment           Enrollment[]
-  courses              CoursePrerequesites[] @relation("main_course")
+  course_id             Int                   @id @default(autoincrement())
+  course_code           String                @unique
+  name                  String
+  credits               Int
+  type                  Type
+  instructor            Instructor            @relation(fields: [instructor_id], references: [instructor_id])
+  instructor_id         Int
+  enrollment            Enrollment[]
+  courses               CoursePrerequesites[] @relation("main_course")
   prerequisites_courses CoursePrerequesites[] @relation("prerequeste_course")
-  regsitration_courses RegistrationDetails[]
+  regsitration_courses  RegistrationDetails[]
 }
 
 model CoursePrerequesites {
@@ -63,28 +66,29 @@ model CoursePrerequesites {
 }
 
 model Instructor {
-  instructor_id Int    @id @default(autoincrement())
+  instructor_id Int                    @id @default(autoincrement())
   name          String
-  email         String @unique
+  email         String                 @unique
   password      String
   phone         String
-  courses Course[]
-  departments InstructorDepartment[]
+  courses       Course[]
+  departments   InstructorDepartment[]
 }
 
-model InstructorDepartment{
-  department Department @relation(fields: [department_id],references: [department_id])
+model InstructorDepartment {
+  department    Department @relation(fields: [department_id], references: [department_id])
   department_id Int
-  instructor Instructor @relation(fields: [instructor_id],references: [instructor_id])
+  instructor    Instructor @relation(fields: [instructor_id], references: [instructor_id])
   instructor_id Int
-  @@id([department_id,instructor_id])
+
+  @@id([department_id, instructor_id])
 }
 
 model Department {
-  department_id Int      @id @default(autoincrement())
+  department_id Int                    @id @default(autoincrement())
   name          String
   students      Student?
-  instructors InstructorDepartment[]
+  instructors   InstructorDepartment[]
 }
 
 model Enrollment {

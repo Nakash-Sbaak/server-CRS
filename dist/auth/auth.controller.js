@@ -26,10 +26,10 @@ let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async signup(newStudent) {
+    async StudentSignup(newStudent) {
         return await this.authService.signUp(newStudent);
     }
-    async signin(body) {
+    async StudentSignin(body) {
         return await this.authService.signIn(body.email, body.password);
     }
     async testJwt() {
@@ -37,19 +37,19 @@ let AuthController = exports.AuthController = class AuthController {
     }
 };
 __decorate([
-    (0, common_1.Post)('signup'),
+    (0, common_1.Put)('/student/signup'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CreateStudent_dto_1.CreateStudentDTO]),
+    __metadata("design:paramtypes", [CreateStudent_dto_1.SignUpStudentDTO]),
     __metadata("design:returntype", Promise)
-], AuthController.prototype, "signup", null);
+], AuthController.prototype, "StudentSignup", null);
 __decorate([
-    (0, common_1.Post)('signin'),
+    (0, common_1.Post)('/student/signin'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [SignIn_dto_1.SignInStudent]),
     __metadata("design:returntype", Promise)
-], AuthController.prototype, "signin", null);
+], AuthController.prototype, "StudentSignin", null);
 __decorate([
     (0, common_1.Post)('/test'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard, new role_guard_1.RoleGuard(role_enum_1.Role.Student)),
