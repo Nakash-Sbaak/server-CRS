@@ -1,6 +1,6 @@
 import { AuthService } from './auth.service';
 import { SignUpStudentDTO } from './dto/CreateStudent.dto';
-import { SignInStudent } from './dto/SignIn.dto';
+import { SignIn } from './dto/SignIn.dto';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
@@ -15,7 +15,7 @@ export declare class AuthController {
         total_credits_earned: number;
         department_id: number;
     }>;
-    StudentSignin(body: SignInStudent): Promise<{
+    StudentSignin(body: SignIn): Promise<{
         access_token: string;
         refresh_token: string;
         student_id: number;
@@ -27,6 +27,15 @@ export declare class AuthController {
         level: number;
         total_credits_earned: number;
         department_id: number;
+    }>;
+    InstructorSignin(body: SignIn): Promise<{
+        access_token: string;
+        refresh_token: string;
+        instructor_id: number;
+        name: string;
+        email: string;
+        password: string;
+        phone: string;
     }>;
     testJwt(): Promise<void>;
 }

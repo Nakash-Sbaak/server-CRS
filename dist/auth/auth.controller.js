@@ -27,10 +27,13 @@ let AuthController = exports.AuthController = class AuthController {
         this.authService = authService;
     }
     async StudentSignup(newStudent) {
-        return await this.authService.signUp(newStudent);
+        return await this.authService.StudentSignUp(newStudent);
     }
     async StudentSignin(body) {
-        return await this.authService.signIn(body.email, body.password);
+        return await this.authService.StudentSignIn(body.email, body.password);
+    }
+    async InstructorSignin(body) {
+        return await this.authService.InstructorSignIn(body.email, body.password);
     }
     async testJwt() {
         console.log('success');
@@ -47,9 +50,16 @@ __decorate([
     (0, common_1.Post)('/student/signin'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [SignIn_dto_1.SignInStudent]),
+    __metadata("design:paramtypes", [SignIn_dto_1.SignIn]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "StudentSignin", null);
+__decorate([
+    (0, common_1.Post)('/instructor/signin'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [SignIn_dto_1.SignIn]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "InstructorSignin", null);
 __decorate([
     (0, common_1.Post)('/test'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard, new role_guard_1.RoleGuard(role_enum_1.Role.Student)),

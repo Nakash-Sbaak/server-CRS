@@ -5,7 +5,7 @@ export declare class AuthService {
     private readonly prismaService;
     private readonly jwtService;
     constructor(prismaService: PrismaService, jwtService: JwtService);
-    signUp(student: SignUpStudent): Promise<{
+    StudentSignUp(student: SignUpStudent): Promise<{
         student_id: number;
         email: string;
         name: string;
@@ -16,7 +16,7 @@ export declare class AuthService {
         total_credits_earned: number;
         department_id: number;
     }>;
-    signIn(email: string, password: string): Promise<{
+    StudentSignIn(email: string, password: string): Promise<{
         access_token: string;
         refresh_token: string;
         student_id: number;
@@ -30,7 +30,15 @@ export declare class AuthService {
         department_id: number;
     }>;
     private checkEmail;
-    private checkStudentId;
+    InstructorSignIn(email: string, password: string): Promise<{
+        access_token: string;
+        refresh_token: string;
+        instructor_id: number;
+        name: string;
+        email: string;
+        password: string;
+        phone: string;
+    }>;
     private createAccessToken;
     private createRefreshToken;
 }

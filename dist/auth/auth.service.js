@@ -19,7 +19,7 @@ let AuthService = exports.AuthService = class AuthService {
         this.prismaService = prismaService;
         this.jwtService = jwtService;
     }
-    async signUp(student) {
+    async StudentSignUp(student) {
         const checkStudent = await this.prismaService.student.findUnique({
             where: { student_id: student.student_id },
         });
@@ -47,7 +47,7 @@ let AuthService = exports.AuthService = class AuthService {
             throw error;
         }
     }
-    async signIn(email, password) {
+    async StudentSignIn(email, password) {
         try {
             const student = await this.prismaService.student.findFirst({
                 where: { email: email },
@@ -86,12 +86,29 @@ let AuthService = exports.AuthService = class AuthService {
             throw error;
         }
     }
-    async checkStudentId(student_id) {
+    async InstructorSignIn(email, password) {
         try {
-            const existingStudent = await this.prismaService.student.findUnique({
-                where: { student_id: student_id },
+            const instructor = await this.prismaService.instructor.findFirst({
+                where: { email: email },
             });
-            return existingStudent ? true : false;
+            if (!instructor) {
+                throw new common_1.HttpException('Email not found', common_1.HttpStatus.NOT_FOUND);
+            }
+            const isPasswordValid = await bcrypt.compare(password, instructor.password);
+            if (!isPasswordValid) {
+                throw new common_1.HttpException('Wrong password', common_1.HttpStatus.UNAUTHORIZED);
+            }
+            const payload = {
+                student_id: instructor.instructor_id,
+                role: 'instructor',
+            };
+            const access_token = await this.createAccessToken(payload);
+            const refresh_token = await this.createRefreshToken(payload);
+            return {
+                ...instructor,
+                access_token: access_token,
+                refresh_token: refresh_token,
+            };
         }
         catch (error) {
             throw error;

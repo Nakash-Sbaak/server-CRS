@@ -10,7 +10,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(student: SignUpStudent) {
+  async StudentSignUp(student: SignUpStudent) {
     // Check if student ID exists
     const checkStudent = await this.prismaService.student.findUnique({
       where: { student_id: student.student_id },
@@ -47,7 +47,7 @@ export class AuthService {
     }
   }
 
-  async signIn(email: string, password: string) {
+  async StudentSignIn(email: string, password: string) {
     try {
       const student = await this.prismaService.student.findFirst({
         where: { email: email },
@@ -65,7 +65,6 @@ export class AuthService {
         student_id: student.student_id,
         role: 'student',
       };
-      // console.log(process.env.JWT_SECRET);
 
       const access_token = await this.createAccessToken(payload);
       const refresh_token = await this.createRefreshToken(payload);
@@ -90,12 +89,35 @@ export class AuthService {
     }
   }
 
-  private async checkStudentId(student_id: number): Promise<boolean> {
+  public async InstructorSignIn(email: string, password: string) {
     try {
-      const existingStudent = await this.prismaService.student.findUnique({
-        where: { student_id: student_id },
+      const instructor = await this.prismaService.instructor.findFirst({
+        where: { email: email },
       });
-      return existingStudent ? true : false;
+
+      if (!instructor) {
+        throw new HttpException('Email not found', HttpStatus.NOT_FOUND);
+      }
+      const isPasswordValid = await bcrypt.compare(
+        password,
+        instructor.password,
+      );
+
+      if (!isPasswordValid) {
+        throw new HttpException('Wrong password', HttpStatus.UNAUTHORIZED);
+      }
+      const payload = {
+        student_id: instructor.instructor_id,
+        role: 'instructor',
+      };
+
+      const access_token = await this.createAccessToken(payload);
+      const refresh_token = await this.createRefreshToken(payload);
+      return {
+        ...instructor,
+        access_token: access_token,
+        refresh_token: refresh_token,
+      };
     } catch (error) {
       throw error;
     }
@@ -123,4 +145,14 @@ export class AuthService {
       throw error;
     }
   }
+  // private async checkStudentId(student_id: number): Promise<boolean> {
+  //   try {
+  //     const existingStudent = await this.prismaService.student.findUnique({
+  //       where: { student_id: student_id },
+  //     });
+  //     return existingStudent ? true : false;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 }
