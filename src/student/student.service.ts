@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Student } from '@prisma/client';
-import { PrismaService } from 'src/prismaService/prisma.service';
+import { PrismaService } from 'src/db/prisma.service';
 
 @Injectable()
 export class StudentService {
@@ -54,10 +54,8 @@ export class StudentService {
 
   public async updateStudent(student_id: string, attr: Partial<Student>) {
     try {
-        
     } catch (error) {
       throw error;
     }
   }
-
 }

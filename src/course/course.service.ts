@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Course as PrismaCourse } from '@prisma/client';
-import { PrismaService } from 'src/prismaService/prisma.service';
+import { PrismaService } from 'src/db/prisma.service';
 
 @Injectable()
 export class CourseService {
