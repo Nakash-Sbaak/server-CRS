@@ -4,7 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { StudentModule } from './student/student.module';
 import { AuthModule } from './auth/auth.module';
-import { JwtModule } from '@nestjs/jwt';
+import { CourseModule } from './course/course.module';
+import { InstructorModule } from './instructor/instructor.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -12,6 +13,8 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     StudentModule,
     AuthModule,
+    CourseModule,
+    InstructorModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -107,7 +107,7 @@ export class AuthService {
         throw new HttpException('Wrong password', HttpStatus.UNAUTHORIZED);
       }
       const payload = {
-        student_id: instructor.instructor_id,
+        instructor_id: instructor.instructor_id,
         role: 'instructor',
       };
 

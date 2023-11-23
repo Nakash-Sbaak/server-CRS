@@ -51,18 +51,18 @@ model Course {
   instructor            Instructor            @relation(fields: [instructor_id], references: [instructor_id])
   instructor_id         Int
   enrollment            Enrollment[]
-  courses               CoursePrerequesites[] @relation("main_course")
-  prerequisites_courses CoursePrerequesites[] @relation("prerequeste_course")
-  regsitration_courses  RegistrationDetails[]
+  courses               CoursePrerequisites[] @relation("main_course")
+  prerequisites_courses CoursePrerequisites[] @relation("prerequeste_course")
+  regsitration_courses  RegistrationDetails[] 
 }
 
-model CoursePrerequesites {
-  course                  Course @relation("main_course", fields: [course_id], references: [course_id])
+model CoursePrerequisites {
+  course                  Course @relation("main_course", fields: [course_id], references: [course_id],onDelete: Cascade)
   course_id               Int
-  course_prerequesites    Course @relation("prerequeste_course", fields: [course_prerequesites_id], references: [course_id])
-  course_prerequesites_id Int
-
-  @@id([course_id, course_prerequesites_id])
+  course_prerequisites    Course @relation("prerequeste_course", fields: [course_prerequisites_id], references: [course_id])
+  course_prerequisites_id Int 
+ 
+  @@id([course_id, course_prerequisites_id])
 }
 
 model Instructor {

@@ -26,7 +26,7 @@ let AuthGuard = exports.AuthGuard = class AuthGuard {
             const payload = await this.jwtService.verifyAsync(token, {
                 secret: process.env.JWT_SECRET,
             });
-            request['student_id'] = payload.student_id;
+            request['id'] = payload.student_id || payload.instructor_id;
             request['role'] = payload.role;
         }
         catch (error) {

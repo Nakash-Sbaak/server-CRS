@@ -13,6 +13,8 @@ const app_service_1 = require("./app.service");
 const config_1 = require("@nestjs/config");
 const student_module_1 = require("./student/student.module");
 const auth_module_1 = require("./auth/auth.module");
+const course_module_1 = require("./course/course.module");
+const instructor_module_1 = require("./instructor/instructor.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -23,6 +25,8 @@ exports.AppModule = AppModule = __decorate([
             }),
             student_module_1.StudentModule,
             auth_module_1.AuthModule,
+            course_module_1.CourseModule,
+            instructor_module_1.InstructorModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

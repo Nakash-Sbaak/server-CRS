@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.StudentController = void 0;
 const common_1 = require("@nestjs/common");
 const student_service_1 = require("./student.service");
-const serialize_interceptor_1 = require("./Interceptor/serialize.interceptor");
+const serialize_interceptor_1 = require("../Interceptor/serialize.interceptor");
 const Student_dto_1 = require("../auth/dto/Student.dto");
 let StudentController = exports.StudentController = class StudentController {
     constructor(studentService) {

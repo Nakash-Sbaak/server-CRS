@@ -1,14 +1,9 @@
 import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpStudentDTO } from './dto/CreateStudent.dto';
-import { Serialize } from 'src/student/Interceptor/serialize.interceptor';
+import { Serialize } from 'src/Interceptor/serialize.interceptor';
 import { StudentDTO } from './dto/Student.dto';
 import { SignIn } from './dto/SignIn.dto';
-import { AuthGuard } from './guard/auth.guard';
-import { Role } from './decorator/role.enum';
-import { RoleGuard } from './guard/role.guard';
-
-// import { RoleGuard } from './guard/role.guard';
 
 @Controller('auth')
 @Serialize(StudentDTO)
@@ -26,10 +21,5 @@ export class AuthController {
   @Post('/instructor/signin')
   async InstructorSignin(@Body() body: SignIn) {
     return await this.authService.InstructorSignIn(body.email, body.password);
-  }
-  @Post('/test')
-  @UseGuards(AuthGuard, new RoleGuard(Role.Student))
-  async testJwt() {
-    console.log('success');
   }
 }

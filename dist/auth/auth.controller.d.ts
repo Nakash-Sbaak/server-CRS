@@ -37,5 +37,4 @@ export declare class AuthController {
         password: string;
         phone: string;
     }>;
-    testJwt(): Promise<void>;
 }

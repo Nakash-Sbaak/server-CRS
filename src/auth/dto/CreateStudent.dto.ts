@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class SignUpStudentDTO {
   @IsNumber()
@@ -8,5 +8,6 @@ export class SignUpStudentDTO {
   email: string;
 
   @IsString()
+  // @MinLength(8)
   password: string;
 }

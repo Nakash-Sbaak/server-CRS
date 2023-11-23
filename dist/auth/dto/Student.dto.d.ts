@@ -7,5 +7,4 @@ export declare class StudentDTO {
     department_id: number;
     access_token: string;
     refresh_token: string;
-    errorFlag: boolean;
 }

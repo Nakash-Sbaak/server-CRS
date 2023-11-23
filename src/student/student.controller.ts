@@ -1,7 +1,6 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { SignUpStudentDTO } from '../auth/dto/CreateStudent.dto';
+import { Controller } from '@nestjs/common';
 import { StudentService } from './student.service';
-import { Serialize } from './Interceptor/serialize.interceptor';
+import { Serialize } from '../Interceptor/serialize.interceptor';
 import { StudentDTO } from '../auth/dto/Student.dto';
 
 @Controller('student')

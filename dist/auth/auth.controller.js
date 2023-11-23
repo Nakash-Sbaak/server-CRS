@@ -16,12 +16,9 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const CreateStudent_dto_1 = require("./dto/CreateStudent.dto");
-const serialize_interceptor_1 = require("../student/Interceptor/serialize.interceptor");
+const serialize_interceptor_1 = require("../Interceptor/serialize.interceptor");
 const Student_dto_1 = require("./dto/Student.dto");
 const SignIn_dto_1 = require("./dto/SignIn.dto");
-const auth_guard_1 = require("./guard/auth.guard");
-const role_enum_1 = require("./decorator/role.enum");
-const role_guard_1 = require("./guard/role.guard");
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -34,9 +31,6 @@ let AuthController = exports.AuthController = class AuthController {
     }
     async InstructorSignin(body) {
         return await this.authService.InstructorSignIn(body.email, body.password);
-    }
-    async testJwt() {
-        console.log('success');
     }
 };
 __decorate([
@@ -60,13 +54,6 @@ __decorate([
     __metadata("design:paramtypes", [SignIn_dto_1.SignIn]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "InstructorSignin", null);
-__decorate([
-    (0, common_1.Post)('/test'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, new role_guard_1.RoleGuard(role_enum_1.Role.Student)),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "testJwt", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     (0, serialize_interceptor_1.Serialize)(Student_dto_1.StudentDTO),

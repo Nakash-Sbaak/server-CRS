@@ -24,5 +24,5 @@ export class StudentDTO {
 
   @Expose()
   refresh_token: string;
-  errorFlag = false;
+
 }

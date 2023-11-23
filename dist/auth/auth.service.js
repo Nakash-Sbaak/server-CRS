@@ -99,7 +99,7 @@ let AuthService = exports.AuthService = class AuthService {
                 throw new common_1.HttpException('Wrong password', common_1.HttpStatus.UNAUTHORIZED);
             }
             const payload = {
-                student_id: instructor.instructor_id,
+                instructor_id: instructor.instructor_id,
                 role: 'instructor',
             };
             const access_token = await this.createAccessToken(payload);
