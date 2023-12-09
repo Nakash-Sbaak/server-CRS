@@ -1,19 +1,25 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { CustomHttpExceptionFilter } from './filters/http-exception.filter';
+import { I18nValidationExceptionFilter, I18nValidationPipe } from 'nestjs-i18n';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // app.useGlobalFilters(new CustomHttpExceptionFilter());
 
+  app.useGlobalPipes(new I18nValidationPipe());
   //Custom exception filter
-  app.useGlobalFilters(new CustomHttpExceptionFilter());
   // to validate inputs
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-    }),
+  app.useGlobalFilters(
+    new I18nValidationExceptionFilter({ detailedErrors: false }),
   );
+
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //   }),
+  // );
+
   app.setGlobalPrefix('/api/v1');
   await app.listen(process.env.PORT || 3000);
 }

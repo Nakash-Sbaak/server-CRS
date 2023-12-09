@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignUpStudentDTO } from './dto/CreateStudent.dto';
+import { SignUpStudentDTO } from './dto/SignUpStudent.dto';
 import { Serialize } from 'src/Interceptor/serialize.interceptor';
 import { StudentDTO } from './dto/Student.dto';
 import { SignIn } from './dto/SignIn.dto';

@@ -1,0 +1,6 @@
+{
+  "IsNumber": "يجب ان يكون رقم {value} يحتوي علي قيمه {property} ",
+  "INVALID_EMAIL": "خطا في البريد الالكتروني",
+  "NOT_EMPTY": "لا يمكن ان يكون فارغ {property}",
+  "IsString":"يجب ان يكون نص {value} يحتوي علي قيمه {property}"
+}

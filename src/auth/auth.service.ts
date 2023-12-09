@@ -3,11 +3,13 @@ import { PrismaService } from 'src/db/prisma.service';
 import { SignUpStudent } from './interfaces/signUpStudent.interface';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { CustomI18Service } from 'src/custom-i18n.service';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly i18n: CustomI18Service,
   ) {}
 
   async StudentSignUp(student: SignUpStudent) {
@@ -16,12 +18,15 @@ export class AuthService {
       where: { student_id: student.student_id },
     });
     if (!checkStudent) {
-      throw new HttpException('Student ID not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        this.i18n.translate('test.S_NOT_FOUND'),
+        HttpStatus.NOT_FOUND,
+      );
     }
     // Check if the student is already signed up
     if (checkStudent.email) {
       throw new HttpException(
-        'This student is already signed up',
+        this.i18n.translate('test.SignedUp'),
         HttpStatus.CONFLICT,
       );
     }

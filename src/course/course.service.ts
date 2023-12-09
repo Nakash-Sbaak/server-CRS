@@ -12,17 +12,17 @@ export class CourseService {
       const existingCourse = await this.prismaService.course.findUnique({
         where: { course_code: course.course_code },
       });
+      // select * from course where course_code = 1;
       if (existingCourse) {
         throw new HttpException(
           'Course code must be unique',
           HttpStatus.CONFLICT,
         );
       }
-      // Check if instructor exists
+      // Check if instructor not exists
       if (!(await this.checkInstructorExistence(course.instructor_id))) {
         throw new HttpException('Instructor not found', HttpStatus.NOT_FOUND);
       }
-      // if prerequisites_courses exist
 
       // Create a new course
       const newCourse = await this.prismaService.course.create({
@@ -93,8 +93,11 @@ export class CourseService {
 
   public async updateCourse(code: string, attr: Partial<PrismaCourse>) {
     try {
-      //Check Course existence
-      if (!(await this.checkCourseExistence(code))) {
+      // Check if course exists
+      const existingCourse = await this.prismaService.course.findUnique({
+        where: { course_code: code },
+      });
+      if (!existingCourse) {
         throw new HttpException('Course not found', HttpStatus.NOT_FOUND);
       }
       //Update course
@@ -125,8 +128,12 @@ export class CourseService {
   }
   public async deleteCourse(code: string) {
     try {
-      //Check Course existence
-      if (!(await this.checkCourseExistence(code))) {
+      // Check Course existence
+      const existingCourse = await this.prismaService.course.findUnique({
+        where: { course_code: code },
+      });
+
+      if (!existingCourse) {
         throw new HttpException('Course not found', HttpStatus.NOT_FOUND);
       }
       await this.prismaService.course.delete({
