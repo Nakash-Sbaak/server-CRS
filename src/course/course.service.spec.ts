@@ -23,6 +23,9 @@ describe('CourseService', () => {
       create: jest.fn(),
       delete: jest.fn(),
     },
+    coursePrerequisites: {
+      create: jest.fn(),
+    },
   };
 
   beforeEach(async () => {
@@ -113,7 +116,7 @@ describe('CourseService', () => {
       mockPrismaService.instructor.findUnique.mockResolvedValueOnce({});
       mockPrismaService.course.findMany.mockResolvedValueOnce({
         course_code: 'MCD34',
-        name: 'introduction to computre science',
+        name: 'introduction to computer science',
         credits: 2,
         type: 'REQUIRED',
         instructor: {
@@ -123,7 +126,7 @@ describe('CourseService', () => {
           {
             course_prerequisites: {
               course_code: 'MCF34',
-              name: 'probably and statesticse',
+              name: 'probably and statistics',
               credits: 5,
               type: 'REQUIRED',
               instructor: {
@@ -136,7 +139,7 @@ describe('CourseService', () => {
       const result = await courseService.getAllCourses();
       expect(result).toEqual({
         course_code: 'MCD34',
-        name: 'introduction to computre science',
+        name: 'introduction to computer science',
         credits: 2,
         type: 'REQUIRED',
         instructor: {
@@ -146,7 +149,7 @@ describe('CourseService', () => {
           {
             course_prerequisites: {
               course_code: 'MCF34',
-              name: 'probably and statesticse',
+              name: 'probably and statistics',
               credits: 5,
               type: 'REQUIRED',
               instructor: {
@@ -193,7 +196,6 @@ describe('CourseService', () => {
         ...updatedCourseData,
       });
 
-      // Act
       const result = await courseService.updateCourse(
         existingCourseCode,
         updatedCourseData,
@@ -226,27 +228,55 @@ describe('CourseService', () => {
       expect(mockPrismaService.course.delete).toHaveBeenCalledWith({
         where: { course_code: existingCourseCode },
       });
-      expect(result).toBe('course deleted successfully');
+      expect(result).toEqual({ message: 'course deleted successfully' });
     });
 
     it('should throw NOT_FOUND if the course does not exist', async () => {
       const nonExistingCourseCode = 'nonexistent';
       mockPrismaService.course.findUnique.mockResolvedValueOnce(null);
 
-      // Act and Assert
       await expect(
         courseService.deleteCourse(nonExistingCourseCode),
       ).rejects.toThrow(
         new HttpException('Course not found', HttpStatus.NOT_FOUND),
       );
 
-      // Verify that the findUnique method was called with the correct parameters
       expect(mockPrismaService.course.findUnique).toHaveBeenCalledWith({
         where: { course_code: nonExistingCourseCode },
       });
     });
   });
 
+  describe('AddPrerequisiteCourse', () => {
+    it('should add a prerequisite course and return success message', async () => {
+      const courseCode = 'CS101';
+      const prerequisiteCourseCode = 'CS102';
+      mockPrismaService.course.findUnique.mockResolvedValueOnce({});
+      mockPrismaService.course.findUnique.mockResolvedValueOnce({});
+      mockPrismaService.coursePrerequisites.create.mockResolvedValueOnce({});
+      const result = await courseService.addPrerequisiteCourse(
+        courseCode,
+        prerequisiteCourseCode,
+      );
+      expect(result).toEqual({ message: 'course added successfully' });
+      expect(mockPrismaService.course.findUnique).toHaveBeenCalledWith({
+        where: { course_code: courseCode },
+      });
+      expect(mockPrismaService.coursePrerequisites.create).toHaveBeenCalled();
+    });
+
+    it('should throw NOT_FOUND if the course does not exist', async () => {
+      const courseCode = 'CS101';
+      const prerequisiteCourseCode = 'CS102';
+      mockPrismaService.course.findUnique.mockResolvedValueOnce(null);
+      await expect(
+        courseService.addPrerequisiteCourse(courseCode, prerequisiteCourseCode),
+      ).rejects.toThrow(
+        new HttpException('course not found', HttpStatus.NOT_FOUND),
+      );
+    });
+    expect(mockPrismaService.coursePrerequisites.create).not.toHaveBeenCalled();
+  });
   afterEach(() => {
     jest.clearAllMocks();
   });

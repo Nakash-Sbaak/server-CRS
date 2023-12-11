@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CourseService } from './course.service';
@@ -24,6 +25,17 @@ export class CourseController {
   @Post('/new')
   async createCourse(@Body() body: NewCourseDTO) {
     return await this.courseService.createCourse(body as PrismaCourse);
+  }
+
+  @Post('/addPre')
+  async addPrerequisiteCourse(
+    @Query('course_code') course_code: string,
+    @Query('pre_course_code ') pre_course_code: string,
+  ) {
+    return await this.courseService.addPrerequisiteCourse(
+      course_code,
+      pre_course_code,
+    );
   }
 
   @Get('/all')

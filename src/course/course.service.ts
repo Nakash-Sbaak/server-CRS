@@ -66,8 +66,8 @@ export class CourseService {
             },
             courses: {
               select: {
-                course_id: false,
-                course_prerequisites_id: false,
+                course_code: false,
+                course_prerequisites_code: false,
                 course_prerequisites: {
                   select: {
                     course_code: true,
@@ -91,6 +91,34 @@ export class CourseService {
     }
   }
 
+  public async addPrerequisiteCourse(
+    course_code: string,
+    prerequisite_course_code: string,
+  ) {
+    try {
+      //check  course exists or not
+      if (!(await this.checkCourseExistence(course_code))) {
+        throw new HttpException('course not found', HttpStatus.NOT_FOUND);
+      }
+      //check  prerequisite  course exists or not
+      if (!(await this.checkCourseExistence(prerequisite_course_code))) {
+        throw new HttpException('course not found', HttpStatus.NOT_FOUND);
+      }
+      const result = await this.prismaService.coursePrerequisites.create({
+        data: {
+          course_code: course_code,
+          course_prerequisites_code: prerequisite_course_code,
+        },
+      });
+      console.log(result);
+
+      return result
+        ? { message: 'course added successfully' }
+        : { message: 'some thing wrong' };
+    } catch (error) {
+      throw error;
+    }
+  }
   public async updateCourse(code: string, attr: Partial<PrismaCourse>) {
     try {
       // Check if course exists
@@ -141,7 +169,7 @@ export class CourseService {
           course_code: code,
         },
       });
-      return 'course deleted successfully';
+      return { message: 'course deleted successfully' };
     } catch (error) {
       throw error;
     }
