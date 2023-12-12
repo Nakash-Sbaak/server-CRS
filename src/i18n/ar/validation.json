@@ -1,6 +1,10 @@
 {
-  "IsNumber": "يجب ان يكون رقم {value} يحتوي علي قيمه {property} ",
+  "IS_NUMBER": "يجب ان يكون رقم {value} يحتوي علي قيمه {property} ",
   "INVALID_EMAIL": "خطا في البريد الالكتروني",
   "NOT_EMPTY": "لا يمكن ان يكون فارغ {property}",
-  "IsString":"يجب ان يكون نص {value} يحتوي علي قيمه {property}"
+  "IS_STRING": "يجب ان يكون نص {value} يحتوي علي قيمه {property}",
+  "MIN": "يجب أن يكون أكبر من أو يساوي {constraint} {property}",
+  "MAX": "يجب أن يكون أقل من أو يساوي {constraint} {property}",
+  "MIN_LENGTH": "الحد الأدنى للطول هو {constraint} أحرف {property}",
+  "IS_INT": "يجب ان يكون رقم صحيح {property}"
 }

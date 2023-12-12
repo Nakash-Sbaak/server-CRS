@@ -5,6 +5,7 @@ export class SignIn {
   @IsEmail({}, { message: i18nValidationMessage('validation.INVALID_EMAIL') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.NOT_EMPTY') })
   email: string;
+  
   @IsString({ message: i18nValidationMessage('validation.IsString') })
   @IsNotEmpty({ message: i18nValidationMessage('validation.NOT_EMPTY') })
   password: string;

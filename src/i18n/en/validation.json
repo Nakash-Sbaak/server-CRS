@@ -1,6 +1,10 @@
 {
-  "IsNumber": "{property} with value: {value} must be number",
+  "IS_NUMBER": "{property} with value: {value} must be number",
+  "IS_INT": "{property} must be an integer",
   "INVALID_EMAIL": "email is invalid",
   "NOT_EMPTY": "{property} cannot be empty",
-  "IsString": "{property} with value: {value} must be string"
+  "IS_STRING": "{property} with value: {value} must be string",
+  "MIN_LENGTH": "{property} Minimum length is {constraint} characters",
+  "MIN": "{property} Must be greater than or equal to {constraint}",
+  "MAX": "{property} Must be less than or equal to {constraint}"
 }

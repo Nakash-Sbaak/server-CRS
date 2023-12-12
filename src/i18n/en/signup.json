@@ -1,0 +1,6 @@
+{
+  "SIGNED_UP": "This student is already signed up",
+  "NOT_EMPTY": "{property} cannot be empty",
+  "ST_NOT_FOUND": "Student ID not found",
+  "EMAIL_EXIST":"Email already exists"
+}

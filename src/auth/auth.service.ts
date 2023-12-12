@@ -19,21 +19,24 @@ export class AuthService {
     });
     if (!checkStudent) {
       throw new HttpException(
-        this.i18n.translate('test.S_NOT_FOUND'),
+        this.i18n.translate('signup.ST_NOT_FOUND'),
         HttpStatus.NOT_FOUND,
       );
     }
     // Check if the student is already signed up
     if (checkStudent.email) {
       throw new HttpException(
-        this.i18n.translate('test.SignedUp'),
+        this.i18n.translate('signup.SIGNED_UP'),
         HttpStatus.CONFLICT,
       );
     }
 
     // Check if email is available
     if (await this.checkEmail(student.email)) {
-      throw new HttpException('Email already exists', HttpStatus.CONFLICT);
+      throw new HttpException(
+        this.i18n.translate('signup.EMAIL_EXIST'),
+        HttpStatus.CONFLICT,
+      );
     }
 
     try {
@@ -59,12 +62,18 @@ export class AuthService {
       });
 
       if (!student) {
-        throw new HttpException('Email not found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          this.i18n.translate('signin.EMAIL_NOT_FOUND'),
+          HttpStatus.NOT_FOUND,
+        );
       }
       const isPasswordValid = await bcrypt.compare(password, student.password);
 
       if (!isPasswordValid) {
-        throw new HttpException('Wrong password', HttpStatus.UNAUTHORIZED);
+        throw new HttpException(
+          this.i18n.translate('signin.WRONG_PASS'),
+          HttpStatus.UNAUTHORIZED,
+        );
       }
       const payload = {
         student_id: student.student_id,
@@ -101,7 +110,10 @@ export class AuthService {
       });
 
       if (!instructor) {
-        throw new HttpException('Email not found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          this.i18n.translate('signin.EMAIL_NOT_FOUND'),
+          HttpStatus.NOT_FOUND,
+        );
       }
       const isPasswordValid = await bcrypt.compare(
         password,
@@ -109,7 +121,10 @@ export class AuthService {
       );
 
       if (!isPasswordValid) {
-        throw new HttpException('Wrong password', HttpStatus.UNAUTHORIZED);
+        throw new HttpException(
+          this.i18n.translate('signin.WRONG_PASS'),
+          HttpStatus.UNAUTHORIZED,
+        );
       }
       const payload = {
         instructor_id: instructor.instructor_id,
