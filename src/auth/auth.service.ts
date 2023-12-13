@@ -57,7 +57,7 @@ export class AuthService {
 
   async StudentSignIn(email: string, password: string) {
     try {
-      const student = await this.prismaService.student.findFirst({
+      const student = await this.prismaService.student.findUnique({
         where: { email: email },
       });
 

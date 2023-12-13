@@ -16,7 +16,6 @@ export class CourseService {
       const existingCourse = await this.prismaService.course.findUnique({
         where: { course_code: course.course_code },
       });
-      // select * from course where course_code = 1;
       if (existingCourse) {
         throw new HttpException(
           this.i18n.translate('course.CODE_UNIQUE'),

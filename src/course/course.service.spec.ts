@@ -6,7 +6,7 @@ import { Course } from '@prisma/client';
 import { CustomI18Service } from 'src/custom-i18n.service';
 
 jest.mock('src/db/prisma.service');
-
+jest.mock('src/custom-i18n.service');
 describe('CourseService', () => {
   let courseService: CourseService;
   const mockPrismaService = {
@@ -56,6 +56,7 @@ describe('CourseService', () => {
 
       mockPrismaService.course.findUnique.mockResolvedValueOnce(null);
       mockPrismaService.instructor.findUnique.mockResolvedValueOnce({});
+      mockI18n.translate.mockResolvedValueOnce('Course code must be unique');
       mockPrismaService.course.create.mockResolvedValueOnce({
         ...courseData,
         course_id: 2,
@@ -89,6 +90,9 @@ describe('CourseService', () => {
         credits: 3,
       };
       mockPrismaService.course.findUnique.mockResolvedValueOnce(courseData);
+      mockI18n.translate.mockImplementationOnce(
+        (key, options) => 'Course code must be unique',
+      );
 
       await expect(
         courseService.createCourse(courseData as Course),
@@ -107,6 +111,9 @@ describe('CourseService', () => {
       };
       mockPrismaService.course.findUnique.mockResolvedValueOnce(null);
       mockPrismaService.instructor.findUnique.mockResolvedValueOnce(null);
+      mockI18n.translate.mockImplementationOnce(
+        (key, options) => 'Instructor not found',
+      );
       await expect(
         courseService.createCourse(courseData as Course),
       ).rejects.toThrow(
@@ -171,6 +178,9 @@ describe('CourseService', () => {
   describe('updateCourse', () => {
     it('should throw NOT_FOUND if the course does not exist', async () => {
       mockPrismaService.course.findUnique.mockResolvedValueOnce(null);
+      mockI18n.translate.mockImplementationOnce(
+        (key, options) => 'Course not found',
+      );
       await expect(courseService.updateCourse('test', {})).rejects.toThrow(
         new HttpException('Course not found', HttpStatus.NOT_FOUND),
       );
@@ -239,7 +249,9 @@ describe('CourseService', () => {
     it('should throw NOT_FOUND if the course does not exist', async () => {
       const nonExistingCourseCode = 'nonexistent';
       mockPrismaService.course.findUnique.mockResolvedValueOnce(null);
-
+      mockI18n.translate.mockImplementationOnce(
+        (key, options) => 'Course not found',
+      );
       await expect(
         courseService.deleteCourse(nonExistingCourseCode),
       ).rejects.toThrow(
@@ -274,10 +286,13 @@ describe('CourseService', () => {
       const courseCode = 'CS101';
       const prerequisiteCourseCode = 'CS102';
       mockPrismaService.course.findUnique.mockResolvedValueOnce(null);
+      mockI18n.translate.mockImplementationOnce(
+        (key, options) => 'Course not found',
+      );
       await expect(
         courseService.addPrerequisiteCourse(courseCode, prerequisiteCourseCode),
       ).rejects.toThrow(
-        new HttpException('course not found', HttpStatus.NOT_FOUND),
+        new HttpException('Course not found', HttpStatus.NOT_FOUND),
       );
     });
     expect(mockPrismaService.coursePrerequisites.create).not.toHaveBeenCalled();
