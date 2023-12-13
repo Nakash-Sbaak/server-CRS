@@ -3,6 +3,7 @@ import { CourseService } from './course.service';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/db/prisma.service';
 import { Course } from '@prisma/client';
+import { CustomI18Service } from 'src/custom-i18n.service';
 
 jest.mock('src/db/prisma.service');
 
@@ -27,13 +28,17 @@ describe('CourseService', () => {
       create: jest.fn(),
     },
   };
-
+  const mockI18n = {
+    translate: jest.fn(),
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CourseService, PrismaService],
+      providers: [CourseService, PrismaService, CustomI18Service],
     })
       .overrideProvider(PrismaService)
       .useValue(mockPrismaService)
+      .overrideProvider(CustomI18Service)
+      .useValue(mockI18n)
       .compile();
 
     courseService = module.get<CourseService>(CourseService);

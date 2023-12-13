@@ -1,10 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Course as PrismaCourse } from '@prisma/client';
+import { CustomI18Service } from 'src/custom-i18n.service';
 import { PrismaService } from 'src/db/prisma.service';
 
 @Injectable()
 export class CourseService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly i18n: CustomI18Service,
+  ) {}
 
   public async createCourse(course: PrismaCourse) {
     try {
@@ -15,13 +19,16 @@ export class CourseService {
       // select * from course where course_code = 1;
       if (existingCourse) {
         throw new HttpException(
-          'Course code must be unique',
+          this.i18n.translate('course.CODE_UNIQUE'),
           HttpStatus.CONFLICT,
         );
       }
       // Check if instructor not exists
       if (!(await this.checkInstructorExistence(course.instructor_id))) {
-        throw new HttpException('Instructor not found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          this.i18n.translate('course.INS_NOT_FOUND'),
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       // Create a new course
@@ -98,11 +105,17 @@ export class CourseService {
     try {
       //check  course exists or not
       if (!(await this.checkCourseExistence(course_code))) {
-        throw new HttpException('course not found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          this.i18n.translate('course.COURSE_NOT_FOUND'),
+          HttpStatus.NOT_FOUND,
+        );
       }
-      //check  prerequisite  course exists or not
+      //check  prerequisite  course  exists or not
       if (!(await this.checkCourseExistence(prerequisite_course_code))) {
-        throw new HttpException('course not found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          this.i18n.translate('course.COURSE_NOT_FOUND'),
+          HttpStatus.NOT_FOUND,
+        );
       }
       const result = await this.prismaService.coursePrerequisites.create({
         data: {
@@ -126,7 +139,10 @@ export class CourseService {
         where: { course_code: code },
       });
       if (!existingCourse) {
-        throw new HttpException('Course not found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          this.i18n.translate('course.COURSE_NOT_FOUND'),
+          HttpStatus.NOT_FOUND,
+        );
       }
       //Update course
       const updatedCourse = await this.prismaService.course.update({
@@ -162,7 +178,10 @@ export class CourseService {
       });
 
       if (!existingCourse) {
-        throw new HttpException('Course not found', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          this.i18n.translate('course.COURSE_NOT_FOUND'),
+          HttpStatus.NOT_FOUND,
+        );
       }
       await this.prismaService.course.delete({
         where: {
