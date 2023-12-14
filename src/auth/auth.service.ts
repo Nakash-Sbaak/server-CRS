@@ -4,12 +4,16 @@ import { SignUpStudent } from './interfaces/signUpStudent.interface';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { CustomI18Service } from 'src/custom-i18n.service';
+import { MailService } from 'src/mail/mail.service';
+import { join } from 'path';
+import { log } from 'console';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly jwtService: JwtService,
     private readonly i18n: CustomI18Service,
+    private readonly emailService: MailService,
   ) {}
 
   async StudentSignUp(student: SignUpStudent) {
@@ -138,6 +142,70 @@ export class AuthService {
         access_token: access_token,
         refresh_token: refresh_token,
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+  async forgetPassword(email: string, ar: boolean) {
+    try {
+      const student = await this.prismaService.student.findUnique({
+        where: { email: email },
+      });
+
+      if (!student) {
+        throw new HttpException(
+          this.i18n.translate('signin.EMAIL_NOT_FOUND'),
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      const { otp } = await this.emailService.sendUserOtp(student.email, ar);
+      student.otp = otp;
+      student.otpExpiry = (Date.now() + 5 * 60 * 1000) as any;
+      await await this.prismaService.student.update({
+        where: { email: student.email },
+        data: student,
+      });
+      return 'email send successfully';
+    } catch (error) {
+      throw error;
+    }
+  }
+  async checkOtp(otp: string) {
+    try {
+      const student = await this.prismaService.student.findUnique({
+        where: {
+          otp,
+        },
+      });
+
+      return student ? student : 'invalid OTP';
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async resetPassword(email: string, otp: string, newPassword: string) {
+    try {
+      const student = await this.prismaService.student.findUnique({
+        where: { email, otp },
+      });
+      // check student and update password
+      //TODO:translate it
+      if (student.otpExpiry < Date.now()) {
+        throw new HttpException('expired OTP', HttpStatus.FORBIDDEN);
+      }
+      if (!student) {
+        throw new HttpException('invalid OTP or email', HttpStatus.BAD_REQUEST);
+      }
+      const hashNewPassword = await bcrypt.hash(newPassword, 10);
+      student.password = hashNewPassword;
+      student.otp = null;
+      student.otpExpiry = null;
+      return await this.prismaService.student.update({
+        where: { email },
+        data: student,
+      });
     } catch (error) {
       throw error;
     }

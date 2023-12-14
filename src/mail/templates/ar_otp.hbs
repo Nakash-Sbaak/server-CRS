@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang='ar'>
+<head>
+  <meta charset='UTF-8' />
+  <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      direction: rtl; /* Right-to-left text direction for Arabic */
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center; /* Center align all content within the container */
+    }
+
+    h1 {
+      color: #007bff;
+      margin-bottom: 15px; /* Add some space below the heading */
+      text-align: right;
+    }
+
+    p {
+      color: #333;
+      text-align: right; /* Reset text alignment for normal paragraphs */
+    }
+
+    .otp-code {
+      color: #ff8800;
+      font-size: 24px;
+      font-weight: bold;
+      margin: 0 auto; /* Center the otp-code paragraph */
+      text-align: center; /* Ensure text alignment */
+    }
+  </style>
+</head>
+<body>
+  <div class='container'>
+    <h1>طلب تغيير كلمة المرور</h1>
+    <p>لقد تلقينا طلبًا لتغيير كلمة المرور الخاصة بك. يرجى استخدام رمز OTP التالي للمتابعة:</p>
+    <p class='otp-code'>{{otp}}</p>
+    <p>إذا لم تكن قد طلبت هذا التغيير ، يمكنك تجاهل هذا البريد الإلكتروني.</p>
+    <p>شكراً لك!</p>
+  </div>
+</body>
+</html>  

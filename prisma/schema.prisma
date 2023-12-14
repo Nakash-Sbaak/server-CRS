@@ -19,6 +19,8 @@ model Student {
   updatedAt            DateTime     @updatedAt
   level                Int
   total_credits_earned Int
+  otp                  String?      @unique
+  otpExpiry            BigInt?
   department           Department   @relation(fields: [department_id], references: [department_id])
   department_id        Int
   enrollment           Enrollment[]

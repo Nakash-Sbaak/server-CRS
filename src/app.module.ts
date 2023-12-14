@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { CourseModule } from './course/course.module';
 import { InstructorModule } from './instructor/instructor.module';
 import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
+import { MailModule } from './mail/mail.module';
 import * as path from 'path';
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import * as path from 'path';
     AuthModule,
     CourseModule,
     InstructorModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

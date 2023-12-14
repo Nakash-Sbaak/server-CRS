@@ -1,9 +1,20 @@
-import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignUpStudentDTO } from './dto/SignUpStudent.dto';
 import { Serialize } from 'src/Interceptor/serialize.interceptor';
 import { StudentDTO } from './dto/Student.dto';
 import { SignIn } from './dto/SignIn.dto';
+import { log } from 'console';
+import { NewPassword } from './dto/newPassword.dto';
 
 @Controller('auth')
 @Serialize(StudentDTO)
@@ -21,5 +32,25 @@ export class AuthController {
   @Post('/instructor/signin')
   async InstructorSignin(@Body() body: SignIn) {
     return await this.authService.InstructorSignIn(body.email, body.password);
+  }
+
+  @Post('/student/reset/password')
+  async sendOtp(@Query('email') email: string, @Query('ar') ar: boolean) {
+    return await this.authService.forgetPassword(email, ar);
+  }
+  @Post('/student/reset/:otp')
+  async CheckOtp(@Param('otp') otp: string) {
+    return await this.authService.checkOtp(otp);
+  }
+
+  @Patch('/student/reset/password')
+  async resetPassword(
+    @Query('email') email: string,
+    @Query('otp') otp: string,
+    @Body() body: NewPassword,
+  ) {
+    console.log(body);
+
+    return await this.authService.resetPassword(email, otp, body.newPassword);
   }
 }
