@@ -49,8 +49,6 @@ export class AuthController {
     @Query('otp') otp: string,
     @Body() body: NewPassword,
   ) {
-    console.log(body);
-
     return await this.authService.resetPassword(email, otp, body.newPassword);
   }
 }

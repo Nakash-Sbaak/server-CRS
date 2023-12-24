@@ -91,7 +91,20 @@ export class CourseService {
             },
           },
         });
-      return allCoursesWithPrerequisites;
+        // Modify the result to rename some fields and make result more understandable
+        const modifyRes = allCoursesWithPrerequisites.map((course)=>{
+            return {
+              ...course,
+              courses:undefined,
+              prerequisites:course.courses.map(({ course_prerequisites })=>{
+                return {
+                  ...course_prerequisites
+                }
+              })
+            }
+        });
+        
+      return modifyRes;
     } catch (error) {
       throw error;
     }

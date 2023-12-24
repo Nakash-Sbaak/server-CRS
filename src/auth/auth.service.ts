@@ -162,7 +162,7 @@ export class AuthService {
       const { otp } = await this.emailService.sendUserOtp(student.email, ar);
       student.otp = otp;
       student.otpExpiry = (Date.now() + 5 * 60 * 1000) as any;
-      await await this.prismaService.student.update({
+      await this.prismaService.student.update({
         where: { email: student.email },
         data: student,
       });
@@ -233,14 +233,4 @@ export class AuthService {
       throw error;
     }
   }
-  // private async checkStudentId(student_id: number): Promise<boolean> {
-  //   try {
-  //     const existingStudent = await this.prismaService.student.findUnique({
-  //       where: { student_id: student_id },
-  //     });
-  //     return existingStudent ? true : false;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
 }
