@@ -11,7 +11,11 @@ async function bootstrap() {
     new I18nValidationExceptionFilter({ detailedErrors: false }),
   );
 
-  app.enableCors();
+  app.enableCors({
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
+  });
   app.setGlobalPrefix('/api/v1');
   await app.listen(process.env.PORT || 3000);
 }
