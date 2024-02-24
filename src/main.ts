@@ -11,7 +11,8 @@ async function bootstrap() {
       preflightContinue: false,
       credentials: true,
     },
-  }); 
+  });
+
   app.useGlobalPipes(new I18nValidationPipe());
   // to validate inputs
   app.useGlobalFilters(

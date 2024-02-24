@@ -1,39 +1,27 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Student } from '@prisma/client';
 import { PrismaService } from 'src/db/prisma.service';
+import { CreateStudentDto } from './dto/create-student.dto';
 
 @Injectable()
 export class StudentService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  // public async createStudent(student: Partial<Student>) {
-  //   // Check if student ID exists
-  //   if (await this.checkStudentId(student.student_id)) {
-  //     throw new HttpException('Student ID already exists', HttpStatus.CONFLICT);
-  //   }
-  //   // Check if email exists
-  //   if (await this.checkEmail(student.email)) {
-  //     throw new HttpException('Email already exists', HttpStatus.CONFLICT);
-  //   }
-  //   try {
-  //     // Create the student
-  //     const newStudent = await this.prismaService.student.create({
-  //       data: {
-  //         student_id: student.student_id,
-  //         name: student.name,
-  //         email: student.email,
-  //         level: student.level,
-  //         total_credits_earned: student.total_credits_earned,
-  //         password: student.password,
-  //         department_id:student.department_id
-  //       },
-  //     });
-  //     return  newStudent ;
-  //   } catch (error) {
-  //     throw error;
-  //   }
-  // }
+  public async createManyStudents(student: CreateStudentDto[]) {
+    try {
+      const students = await this.prismaService.student.createMany({
+        data: student,
+        skipDuplicates: true, // don't throw error if data already exists in the database.
+      });
 
+      return students;
+    } catch (error) {
+      throw error;
+    } finally {
+      this.prismaService.$disconnect();
+    }
+  }
+  
   public async getStudent(student_id: number) {
     try {
       return await this.prismaService.student.findUnique({
@@ -41,15 +29,17 @@ export class StudentService {
       });
     } catch (error) {
       throw error;
+    } finally {
+      this.prismaService.$disconnect();
     }
   }
 
   public async getAllStudents() {
-    try {
-      return await this.prismaService.student.findFirst();
-    } catch (error) {
-      throw error;
+    const students = await this.prismaService.student.findMany();
+    if (students.length == 0) {
+      throw new HttpException('No students found', HttpStatus.NOT_FOUND);
     }
+    return students;
   }
 
   public async updateStudent(student_id: string, attr: Partial<Student>) {

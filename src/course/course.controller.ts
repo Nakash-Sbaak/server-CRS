@@ -27,10 +27,10 @@ export class CourseController {
     return await this.courseService.createCourse(body as PrismaCourse);
   }
 
-  @Post('/addPre')
+  @Post('/add-pre-course')
   async addPrerequisiteCourse(
     @Query('course_code') course_code: string,
-    @Query('pre_course_code ') pre_course_code: string,
+    @Query('pre_course_code') pre_course_code: string,
   ) {
     return await this.courseService.addPrerequisiteCourse(
       course_code,

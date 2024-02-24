@@ -17,8 +17,9 @@ model Student {
   password             String?
   createdAt            DateTime     @default(now())
   updatedAt            DateTime     @updatedAt
-  level                Int
-  total_credits_earned Int
+  enrollment_at        String       @db.VarChar(150)
+  gpa                  String       @db.VarChar(100)
+  total_credits_earned Int          @default(0)
   otp                  String?      @unique
   otpExpiry            BigInt?
   department           Department   @relation(fields: [department_id], references: [department_id])

@@ -1,28 +1,13 @@
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
 export class StudentDTO {
-  @Expose()
-  student_id: string;
+  @Exclude()
+  password: string;
 
-  @Expose()
-  email: string;
+  @Exclude()
+  otp: number;
 
-  @Expose()
-  name: string;
-
-  @Expose()
-  year_level: string;
-
-  @Expose()
-  total_credits_earned: string;
-
-  @Expose()
-  department_id: number;
-
-  @Expose()
-  access_token: string;
-
-  @Expose()
-  refresh_token: string;
-
+  @Exclude()
+  otpExpiry: Date;
 }
+ 

@@ -79,6 +79,7 @@ export class AuthService {
           HttpStatus.UNAUTHORIZED,
         );
       }
+
       const payload = {
         student_id: student.student_id,
         role: 'student',
@@ -110,7 +111,7 @@ export class AuthService {
   public async InstructorSignIn(email: string, password: string) {
     try {
       const instructor = await this.prismaService.instructor.findFirst({
-        where: { email: email },
+        where: { email },
       });
 
       if (!instructor) {
@@ -119,6 +120,7 @@ export class AuthService {
           HttpStatus.NOT_FOUND,
         );
       }
+
       const isPasswordValid = await bcrypt.compare(
         password,
         instructor.password,
@@ -226,8 +228,9 @@ export class AuthService {
     try {
       const accessToken = await this.jwtService.signAsync(payload, {
         secret: process.env.JWT_SECRET,
-        expiresIn: '30d',
+        expiresIn: '20h',
       });
+
       return accessToken;
     } catch (error) {
       throw error;
